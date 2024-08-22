@@ -54,5 +54,15 @@ testProperty x = (id . d) x == (d . id) x && (d . id) x == d x
 {- 
 To summarize: A category consists of objects and arrows (morphisms).
 Arrows can be composed, and the composition is associative.Every object
-has an identity arrow that serves as a unit under composition
- -}
+has an identity arrow that serves as a unit under composition-}
+
+ {- 1.3_Composition_is_the_Essence_of_Programming
+"Elegant code creates chunks that are just the right size and come in
+just the right number for our mental digestive system to assimilate them.
+So what are the right chunks for the composition of programs? Their surface
+area has to increase slower than their volume. (I like this analogy because
+of the intuition that the surface area of a geometric object grows with the
+square of its size — slower than the volume, which grows with the cube of
+its size.)
+The surface area is the information we need in order to compose chunks. The
+volume is the information we need in order to implement them" CTfP p. 9 -}
