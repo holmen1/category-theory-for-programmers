@@ -37,7 +37,7 @@ std::pair<bool, string> negate2(bool b) {
 // To see how this can be done, let’s switch to a slightly more realistic
 // example. We have one function from string to string that turns lower
 // case characters to upper case:
-string toUpper(string s) {
+string toUpper_(string s) {
     string result;
     int (*toupperp)(int) = &toupper; // toupper is overloaded
     transform(begin(s), end(s), back_inserter(result), toupperp);
@@ -60,23 +60,54 @@ vector<string> words(string s) {
     return result;
 }
 
-vector<string> toWords(string s) {
+vector<string> toWords_(string s) {
     return words(s);
+}
+
+
+// We want to modify the functions toUpper and toWords so that they
+// piggyback a message string on top of their regular return values.
+// We will “embellish” the return values of these functions. Let’s do it
+// in a generic way by defining a template Writer that encapsulates a pair
+// whose first component is a value of arbitrary type A and the second
+// component is a string:
+
+template<class A>
+using Writer = std::pair<A, string>;
+
+// Here are the embellished functions:
+Writer<string> toUpper(string s) {
+    string result;
+    int (*toupperp)(int) = &toupper;
+    transform(begin(s), end(s), back_inserter(result), toupperp);
+    return make_pair(result, "toUpper ");
+}
+
+Writer<vector<string>> toWords(string s) {
+    return make_pair(words(s), "toWords ");
+}
+
+// We want to compose these two functions into another embellished
+// function that uppercases a string and splits it into words, all the while
+// producing a log of those actions. Here’s how we may do it:
+Writer<vector<string>> process(string s) {
+    auto p1 = toUpper(s);
+    auto p2 = toWords(p1.first);
+    return std::make_pair(p2.first, p1.second + p2.second);
 }
 
 
 
 int main() {
     string text = "hello world";
-    vector<string> words = toWords(text);
-    for (const auto& word : words) {
-        std::cout << word << std::endl;
+    auto result = process(text);
+    std::cout << "Result: ";
+    for (auto& word : result.first) {
+        std::cout << word << " ";
     }
-
-    string upperText = toUpper(text);
-    std::cout << upperText << std::endl;
-
-    return 0;
+    std::cout << "\nLog: " << result.second << std::endl;
 
     return 0;
 }
+// Result: HELLO WORLD 
+// Log: toUpper toWords 
