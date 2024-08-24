@@ -41,7 +41,7 @@ string toUpper_(string s) {
     string result;
     int (*toupperp)(int) = &toupper; // toupper is overloaded
     transform(begin(s), end(s), back_inserter(result), toupperp);
-return result;
+    return result;
 }
 
 // and another that splits a string into a vector of strings, breaking it on
@@ -52,10 +52,10 @@ vector<string> words(string s) {
     vector<string> result{""};
     for (auto i = begin(s); i != end(s); ++i)
     {
-    if (isspace(*i))
-    result.push_back("");
-    else
-    result.back() += *i;
+        if (isspace(*i))
+            result.push_back("");
+        else
+            result.back() += *i;
     }
     return result;
 }
@@ -96,13 +96,12 @@ Writer<vector<string>> process(string s) {
     return std::make_pair(p2.first, p1.second + p2.second);
 }
 
-
-
 int main() {
     string text = "hello world";
     auto result = process(text);
     std::cout << "Result: ";
-    for (auto& word : result.first) {
+    for (auto &word : result.first)
+    {
         std::cout << word << " ";
     }
     std::cout << "\nLog: " << result.second << std::endl;
