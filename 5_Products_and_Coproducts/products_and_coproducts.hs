@@ -1,4 +1,5 @@
 import Data.Void
+import qualified Data.Map as Map 
 
 
 {- Initial object
@@ -66,17 +67,68 @@ to c’ that factorizes those injections -}
 {- Unlike the canonical implementation of the product that is built into
 Haskell as the primitive pair, the canonical implementation of the co-
 product is a data type called Either, which is defined in the standard
-Prelude as: -}
--- Either a b = Left a | Right b
+Prelude as:
+Either a b = Left a | Right b
+
+ghci> Left 23
+Left 23
+ghci> Right 'x'
+Right 'x'
+ghci> :t Left 23
+Left 23 :: Num a => Either a b
+ghci> :t Right 'x'
+Right 'x' :: Either a Char
+
+
+Just as we’ve defined the factorizer for a product, we can define one
+for the coproduct. Given a candidate type c and two candidate injec-
+tions i and j, the factorizer for Either produces the factoring function:
+factorizer :: (a -> c) -> (b -> c) -> Either a b -> c
+factorizer i j (Left a) = i a
+factorizer i j (Right b) = j b -}
 
 {- In Haskell, you can combine any data types into a tagged union by
-separating data constructors with a vertical bar. The Contact example
-translates into the declaration: -}
-data Contact = PhoneNum Int | EmailAddr String
+separating data constructors with a vertical bar. -}
+  
+data LockerState = Taken | Free deriving (Show, Eq)
+type Code = String
+type LockerMap = Map.Map Int (LockerState, Code)
 
-helpdesk :: Contact
+lockerLookup :: Int -> LockerMap -> Either String Code  
+lockerLookup lockerNumber map = 
+    case Map.lookup lockerNumber map of  
+        Nothing -> Left $ "Locker number " ++ show lockerNumber ++ " doesn't exist!"  
+        Just (state, code) -> if state /= Taken  
+                                then Right code  
+                                else Left $ "Locker " ++ show lockerNumber ++ " is already taken!"
+
+lockers :: LockerMap  
+lockers = Map.fromList  
+    [(100,(Taken,"ZD39I"))  
+    ,(101,(Free,"JAH3I"))  
+    ,(103,(Free,"IQSA9"))  
+    ,(105,(Free,"QOTSA"))  
+    ,(109,(Taken,"893JJ"))  
+    ,(110,(Taken,"99292"))  
+    ]
+
+-- ghci> lockerLookup 101 lockers
+-- Right "JAH3I"
+-- ghci> lockerLookup 102 lockers
+-- Left "Locker number 102 doesn't exist!"
+-- ghci> lockerLookup 105 lockers
+-- Right "QOTSA"
+-- ghci> lockerLookup 110 lockers
+-- Left "Locker 110 is already taken!"
+
+
+--test
+data Contact = PhoneNum Int | EmailAddr String deriving (Show)
 helpdesk = PhoneNum 2222222
 
+exampleValue = Left 23
+-- ghci> :t exampleValue
+-- exampleValue :: Either Integer b
 
 
 

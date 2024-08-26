@@ -24,7 +24,61 @@ int j(bool b) { return b? 0: 1; }
 bool that cannot be better than Either because it allows multiple
 acceptable morphisms from it to Either. """
 
+#1. Show that the terminal object is unique up to unique isomorphism.
+#https://statusfailed.com/blog/2019/04/25/what-does-unique-up-to-isomorphism-really-mean.html
+
+#4. Implement the equivalent of Haskell Either as a generic type in python
+
 class Either:
+    def __init__(self, left=None, right=None):
+        self.left = left
+        self.right = right
+
+    @staticmethod
+    def make_left(value):
+        return Either(left=value)
+
+    @staticmethod
+    def make_right(value):
+        return Either(right=value)
+
+    @property
+    def is_left(self):
+        return self.left is not None
+
+    @property
+    def is_right(self):
+        return self.right is not None
+
+        
+# Testing
+el = Either.make_left(5)
+print(el.is_left)   # True
+print(el.left)      # 5
+
+er = Either.make_right(1729)
+print(er.is_left)   # False
+print(er.right)     # 1729
+
+
+#5. Show that Either is a “better” coproduct than int equipped with two injections:
+
+def i(n: int) -> int:
+    return n
+
+def j(b: bool) -> int:
+    return 0 if b else 1
+
+def m(e: Either) -> int:
+    if e.is_left:
+        return e.left
+    return 0 if e.right else 1
+
+#Testing
+e = Either.make_left(5)
+print(m(e)) # 5
+
+    
 
  
     
