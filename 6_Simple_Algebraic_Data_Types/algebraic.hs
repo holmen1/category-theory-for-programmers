@@ -208,6 +208,9 @@ data Shape = Circle Float | Rect Float Float
 area :: Shape -> Float
 area (Circle r) = pi * r * r
 area (Rect d h) = d * h
+circ :: Shape -> Float
+circ (Circle r) = 2.0 * pi * r
+circ (Rect d h) = 2.0 * (d + h)
 
 c = Circle 2.0
 r = Rect 4.0 3.0
@@ -215,7 +218,11 @@ main :: IO ()
 main = do
     print $ "Circle area: " ++ show (area c)
     print $ "Rectangle area: " ++ show (area r)
+    print $ "Circle circumference: " ++ show (circ c)
+    print $ "Rectangle perimeter: " ++ show (circ r)
 -- ghci> main
 -- "Circle area: 12.566371"
 -- "Rectangle area: 12.0"
+-- "Circle circumference: 12.566371"
+-- "Rectangle perimeter: 14.0"
 

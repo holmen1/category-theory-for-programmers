@@ -12,7 +12,7 @@ classes: Circle and Rect. Implement area as a virtual function.
 3. Continuing with the previous example: We can easily add a new
 function circ that calculates the circumference of a Shape. We
 can do it without touching the definition of Shape:
-90circ :: Shape -> Float
+circ :: Shape -> Float
 circ (Circle r) = 2.0 * pi * r
 circ (Rect d h) = 2.0 * (d + h)
 Add circ to your C++ or Java implementation. What parts of the
@@ -25,7 +25,7 @@ mer, the modifications should be pretty obvious.)
 Remember that 2 corresponds to Bool, according to our transla-
 tion table. */
 
-// Challenge 6.2
+
 #include <iostream>
 #include <cmath>
 
@@ -33,6 +33,7 @@ class Shape {
 public:
     virtual ~Shape() = default;
     virtual float area() const = 0;
+    virtual float circ() const = 0;
 };
 
 class Circle : public Shape {
@@ -43,6 +44,9 @@ public:
     float area() const override {
         return M_PI * radius * radius;
     }
+    float circ() const override {
+        return 2.0 * M_PI * radius;
+    }
 };
 
 class Rect : public Shape {
@@ -52,6 +56,9 @@ public:
     Rect(float w, float h) : width(w), height(h) {}
     float area() const override {
         return width * height;
+    }
+    float circ() const override {
+        return 2.0 * (width + height);
     }
 };
 
@@ -64,7 +71,8 @@ int main() {
 
     for (Shape* shape : shapes) {
         std::cout << "Area: " << shape->area() << std::endl;
-        delete shape;
+        std::cout << "Cicumference: " << shape->circ() << std::endl;
+        delete shape; // Free the allocated memory
     }
 
     return 0;
