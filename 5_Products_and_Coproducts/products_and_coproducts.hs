@@ -126,6 +126,7 @@ lockers = Map.fromList
 data Contact = PhoneNum Int | EmailAddr String deriving (Show)
 helpdesk = PhoneNum 2222222
 
+exampleValue :: Either Integer String
 exampleValue = Left 23
 -- ghci> :t exampleValue
 -- exampleValue :: Either Integer b
