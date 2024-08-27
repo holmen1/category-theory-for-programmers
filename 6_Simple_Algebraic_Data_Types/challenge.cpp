@@ -62,11 +62,25 @@ public:
     }
 };
 
+class Square : public Shape {
+private:
+    float side;
+public:
+    Square(float s) : side(s) {}
+    float area() const override {
+        return side * side;
+    }
+    float circ() const override {
+        return 4.0 * side;
+    }
+};
+
 
 int main() {
     Shape* shapes[] = {
         new Circle(2.0),
-        new Rect(4.0, 3.0)
+        new Rect(4.0, 3.0),
+        new Square(5.0)
     };
 
     for (Shape* shape : shapes) {
