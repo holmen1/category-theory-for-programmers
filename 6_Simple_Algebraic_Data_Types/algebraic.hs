@@ -226,3 +226,31 @@ main = do
 -- "Circle circumference: 12.566371"
 -- "Rectangle perimeter: 14.0"
 
+
+-- Challenge
+-- 1. Show the isomorphism between Maybe a and Either () a
+eitherToMaybe :: Either () a -> Maybe a
+eitherToMaybe (Left ()) = Nothing
+eitherToMaybe (Right a) = Just a
+
+maybeToEither :: Maybe a -> Either () a
+maybeToEither Nothing = Left ()
+maybeToEither (Just a) = Right a
+
+
+l = Right 4
+m = eitherToMaybe l
+n = maybeToEither m
+-- ghci> n
+-- Right 4
+
+
+-- 5. Show that a + a = 2 * a holds for types (up to isomorphism).
+-- Remember that 2 corresponds to Bool, according to our translation table
+eitherToPair :: Either a a -> (Bool, a)
+eitherToPair (Left a)  = (False, a)
+eitherToPair (Right a) = (True, a)
+
+pairToEither :: (Bool, a) -> Either a a
+pairToEither (False, a) = Left a
+pairToEither (True, a)  = Right a

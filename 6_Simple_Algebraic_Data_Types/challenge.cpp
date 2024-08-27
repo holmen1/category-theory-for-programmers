@@ -1,4 +1,5 @@
-/* 1. Show the isomorphism between Maybe a and Either () a.
+/*
+1. Show the isomorphism between Maybe a and Either () a.
 2. Here’s a sum type defined in Haskell:
 data Shape = Circle Float
 | Rect Float Float
