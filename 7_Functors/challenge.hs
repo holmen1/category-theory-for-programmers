@@ -24,3 +24,20 @@ words, use induction). -}
 --                = fmap g (fmap h f)
 --                = (fmap g . fmap h) f
 
+-- 4.
+-- fmap _ Nil = Nil
+-- fmap f (Cons x t) = Cons (f x) (fmap f t)
+
+-- fmap id Nil = Nil = id Nil
+-- fmap id (Cons x t) = Cons (id x) (fmap id t)
+--                    = Cons x (fmap id t)
+--                    = Cons x t
+--                    = id (Cons x t)
+
+-- fmap (g . h) Nil = Nil = fmap g (fmap h Nil) = (fmap g . fmap h) Nil
+-- fmap (g . h) (Cons x t) = Cons ((g . h) x) (fmap (g . h) t)
+--                         = Cons ((g . h) x) ((fmap g . fmap h) t)
+--                         = Cons (g (h x)) (fmap g (fmap h t))
+--                         = fmap g (Cons (h x) (fmap h t))
+--                         = fmap g (fmap h (Cons x t))
+--                         = (fmap g . fmap h) (Cons x t)

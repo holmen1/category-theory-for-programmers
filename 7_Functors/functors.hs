@@ -197,8 +197,6 @@ str2Int = float2Int . str2Float
 
 
 
-
-
 {- Functors as Containers
 Ex nats :: [Integer] nats = [1..]
 Haskell effectively blurs the distinction between data and code. A list
