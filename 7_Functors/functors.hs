@@ -136,6 +136,15 @@ the instance declaration for the list functor:
 instance Functor List where
     fmap _ Nil = Nil
     fmap f (Cons x t) = Cons (f x) (fmap f t)
+
+P.S.
+Ah, interesting! It takes a function from one type to another and a list of one type
+and returns a list of another type. My friends, I think we have ourselves a functor!
+In fact, map is just a fmap that works only on lists. Here's how the list is an instance
+of the Functor typeclass.
+
+instance Functor [] where
+    fmap = map
  -}
 
 
@@ -174,6 +183,21 @@ This combination of the type constructor (->) r with the above implementation
 of fmap is called the reader functor.
 -}
 
+--Example usung the Reader Functor
+str2Float :: String -> Float
+str2Float = read
+
+float2Int :: Float -> Int
+float2Int = round
+
+str2Int :: String -> Int
+str2Int = float2Int . str2Float
+-- ghci> str2Int "3.7"
+-- 4
+
+
+
+
 
 {- Functors as Containers
 Ex nats :: [Integer] nats = [1..]
@@ -195,5 +219,32 @@ maybeTail :: [a] -> Maybe [a]
 maybeTail [] = Nothing
 maybeTail (x:xs) = Just xs
 
+The result of maybeTail is of a type that’s a composition of two functors,
+Maybe and [], acting on a. maybeTail :: List a -> Maybe (List a)
+Each of these functors is equipped with its own version of fmap, but what if
+we want to apply some function f to the contents of the composite: a Maybe list?
+For instance, let’s see how we can square the elements of a Maybe list of integers:-}
+square x = x * x
+mis :: Maybe [Int]
+mis = Just [1, 2, 3]
+mis2 = fmap (fmap square) mis
+-- ghci> mis2
+-- Just [1,4,9]
 
- -}
+mis2' = (fmap . fmap) square mis
+-- ghci> mis2'
+-- Just [1,4,9]
+
+{- The compiler, after analyzing the types, will figure out that, for the
+outer fmap, it should use the implementation from the Maybe instance,
+and for the inner one, the list functor implementation. It may not be
+immediately obvious that the above code may be rewritten as:
+mis2 = (fmap . fmap) square mis
+But remember that fmap may be considered a function of just one argument:
+fmap :: (a -> b) -> (f a -> f b)
+In our case, the second fmap in (fmap . fmap) takes as its argument:
+square :: Int -> Int
+and returns a function of the type:
+[Int] -> [Int]
+The first fmap then takes that function and returns a function:
+Maybe [Int] -> Maybe [Int] -}
