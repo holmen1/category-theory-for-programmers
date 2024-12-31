@@ -1,3 +1,6 @@
+# Ignore all executables without extensions
+*[!.]*
+
 dist
 dist-*
 cabal-dev
@@ -22,7 +25,3 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 
-
-# This section contains the executable code that will be executed when the script is run.
-4_Kleisli_Categories/challenge/kleisli_categories
-6_Simple_Algebraic_Data_Types/challenge
