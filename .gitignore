@@ -1,5 +1,5 @@
-# Ignore all executables without extensions
-*[!.]*
+# Ignore specific executables
+hello
 
 dist
 dist-*
@@ -24,4 +24,7 @@ cabal.project.local
 cabal.project.local~
 .HTF/
 .ghc.environment.*
+
+# Ignore specific executables
+hello
 

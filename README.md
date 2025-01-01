@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the exercises in the book "Category Theory for Programmers" by Bartosz Milewski
 
-## Set up a Haskell development environment
+## 0 Set up a Haskell development environment
 
 GHCup makes it easy to install specific versions of GHC and Cabal. It also installs the Haskell Language Server (HLS) which provides IDE-like features for Haskell development
 [install](https://www.haskell.org/ghcup/install/)
@@ -55,3 +55,73 @@ ghci> :l hello.hs
 Ok, one module loaded.
 ```
 `:l hello.hs` is a shortcut for `:load hello.hs` which loads the source file into the interpreter
+
+## 1 Category: The Essence of Composition
+
+### Arrows as Functions
+Think of arrows, which are also called morphisms, as functions. You have
+a function f that takes an argument of type A and returns a type B. You have
+another function g that takes a type B and returns a type C.
+
+You can compose them by passing the result of f to g. You have just defined
+a new function h that takes an A and returns a C
+
+```haskell
+data A
+data B
+data C
+
+f :: A -> B
+f = undefined
+
+g :: B -> C
+g = undefined
+
+h :: A -> C
+h = g . f
+```
+
+### Properties of Composition
+- Composition is associative
+```haskell
+data D
+k :: C -> D
+k = undefined
+
+l :: A -> D
+l = k . (g . f)
+
+l' :: A -> D
+l' = (k . g) . f
+
+l'' :: A -> D
+l'' = k . g . f
+
+l == l' == l''
+```
+- For every object A there is an arrow which is a unit of composition
+This arrow loops from the object to itself. Being a unit of composition means
+that, when composed with any arrow that either starts at A or ends at A,
+respectively, it gives back the same arrow.
+
+[identity.hs](1_Category_The_Essence_of_Composition/identity.hs)
+```haskell
+data E = EValue deriving (Show)
+data F = FValue deriving (Show, Eq)
+
+d :: E -> F
+d _ = FValue
+
+-- Test the property
+testProperty :: E -> Bool
+testProperty x = (id . d) x == (d . id) x && (d . id) x == d x
+```
+
+```bash
+$ runghc identity.hs 
+True
+```
+
+To summarize: A category consists of objects and arrows (morphisms).
+Arrows can be composed, and the composition is associative.Every object
+has an identity arrow that serves as a unit under composition.

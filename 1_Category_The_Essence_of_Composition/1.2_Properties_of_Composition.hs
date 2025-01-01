@@ -18,6 +18,7 @@ g = undefined
 c :: A -> C
 c = g . f
 
+## Properties of Composition
 -- Composition is associative
 data D
 h :: C -> D
