@@ -56,7 +56,7 @@ Ok, one module loaded.
 ```
 `:l hello.hs` is a shortcut for `:load hello.hs` which loads the source file into the interpreter
 
-## 1 Category: The Essence of Composition
+## 1. Category: The Essence of Composition
 
 ### Arrows as Functions
 Think of arrows, which are also called morphisms, as functions. You have
@@ -106,8 +106,8 @@ respectively, it gives back the same arrow.
 
 [identity.hs](1_Category_The_Essence_of_Composition/identity.hs)
 ```haskell
-data E = EValue deriving (Show)
-data F = FValue deriving (Show, Eq)
+data E = EValue
+data F = FValue deriving (Eq)
 
 d :: E -> F
 d _ = FValue
@@ -115,6 +115,10 @@ d _ = FValue
 -- Test the property
 testProperty :: E -> Bool
 testProperty x = (id . d) x == (d . id) x && (d . id) x == d x
+
+main :: IO ()
+main = do
+  putStrLn $ show $ testProperty EValue
 ```
 
 ```bash
@@ -122,6 +126,7 @@ $ runghc identity.hs
 True
 ```
 
-To summarize: A category consists of objects and arrows (morphisms).
-Arrows can be composed, and the composition is associative.Every object
-has an identity arrow that serves as a unit under composition.
+To summarize: A category consists of objects and arrows (morphisms). Arrows can be composed, and the composition is associative. Every object has an identity arrow that serves as a unit under composition.
+
+### Composition is the Essence of Programming
+We are solving a non-trivial problem (if it were trivial, we wouldn’t need the help of the computer). And how do we solve problems? We decompose bigger problems into smaller problems. If the smaller problems are still too big, we decompose them further, and so on. Finally, we write code that solves all the small problems. And then comes the essence of programming: we compose those pieces of code to create solutions to larger problems.

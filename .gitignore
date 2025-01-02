@@ -1,6 +1,7 @@
 # Ignore specific executables
 hello
 
+.venv
 dist
 dist-*
 cabal-dev
