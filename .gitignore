@@ -1,5 +1,6 @@
 # Ignore specific executables
 hello
+challenge4
 
 .venv
 dist
@@ -26,6 +27,5 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 
-# Ignore specific executables
-hello
+
 
