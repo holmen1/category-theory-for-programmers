@@ -280,9 +280,9 @@ would fail to produce a log. This function has side effects
 ### The Writer Category
 The idea of embellishing the return types of a bunch of functions in
 order to piggyback some additional functionality turns out to be very
-fruitful. We’ll see many more examples of it. The starting point is our
-regular category of types and functions. We’ll leave the types as objects,
-but redefine our morphisms to be the embellished functions.
+fruitful. We’ll see many more examples of it. The starting point is our regular category of types and functions. We’ll leave the types as objects, but redefine our morphisms to be the embellished functions.  
+See [writer.cpp](4_Kleisli_Categories/writer.cpp)
+
 
 ### Writer in Haskell
 The same thing in Haskell is a little more terse, and we also get a lot
