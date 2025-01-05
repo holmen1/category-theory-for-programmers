@@ -286,26 +286,29 @@ See [writer.cpp](4_Kleisli_Categories/writer.cpp)
 
 ### Writer in Haskell
 The same thing in Haskell is a little more terse, and we also get a lot
-more help from the compiler. Let’s start by defining the Writer type:
+more help from the compiler:
 
 ```haskell
 type Writer a = (a, String)
-```
 
-Our morphisms are functions from an arbitrary type to some Writer type: a -> Writer b  
-We’ll declare the composition as a funny infix operator, sometimes called the “fish”. It’s a function of two arguments, each being a function on its own, and returning a function. The first argument is of the type (a->Writer b), the second is (b->Writer c), and the result is (a->Writer c).  
-Here’s the definition of this infix operator — the two arguments m1 and m2 appearing on either side of the fishy symbol:
-
-```haskell
 (>=>) :: (a -> Writer b) -> (b -> Writer c) -> (a -> Writer c)
 m1 >=> m2 = \x ->
     let (y, s1) = m1 x
         (z, s2) = m2 y
     in (z, s1 ++ s2)
-```
-I will also define the identity morphism for our category, but for reasons that will become clear much later, I will call it return.
 
-```haskell
 return :: a -> Writer a
 return x = (x, "")
 ```
+
+Our morphisms are functions from an arbitrary type to some Writer type: a -> Writer b  
+We’ll declare the composition as a funny infix operator, sometimes called the “fish”. It’s a function of two arguments, each being a function on its own, and returning a function. The first argument is of the type (a->Writer b), the second is (b->Writer c), and the result is (a->Writer c).  
+See [writer.hs](4_Kleisli_Categories/writer.hs) for the full implementation.
+
+### Kleisli Categories
+For our limited purposes, a Kleisli category has, as objects, the types of the underlying programming language. Morphisms from type A to type B are functions that go from
+A to a type derived from B using the particular embellishment. Each
+Kleisli category defines its own way of composing such morphisms, as
+well as the identity morphisms with respect to that composition.  
+
+
