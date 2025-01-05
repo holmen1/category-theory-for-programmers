@@ -260,3 +260,52 @@ in the fact that elements of a hom-set can be seen both as morphisms,
 which follow the rules of composition, and as points in a set. Here,
 composition of morphisms in M translates into monoidal product in
 the set M(m, m).
+
+## 4. Kleisli Categories
+You’ve seen how to model types and pure functions as a category. I also mentioned that there is a way to model side effects, or non-pure functions, in category theory. Let’s have a look at one such example: functions that log or trace their execution. Something that, in an imperative language, would likely be implemented by mutating some global state, as in:
+
+```c++
+string logger;
+bool negate(bool b) {
+  logger += "Not so! ";
+  return !b;
+}
+```
+
+
+You know that this is not a pure function, because its memoized version
+would fail to produce a log. This function has side effects
+
+
+### The Writer Category
+The idea of embellishing the return types of a bunch of functions in
+order to piggyback some additional functionality turns out to be very
+fruitful. We’ll see many more examples of it. The starting point is our
+regular category of types and functions. We’ll leave the types as objects,
+but redefine our morphisms to be the embellished functions.
+
+### Writer in Haskell
+The same thing in Haskell is a little more terse, and we also get a lot
+more help from the compiler. Let’s start by defining the Writer type:
+
+```haskell
+type Writer a = (a, String)
+```
+
+Our morphisms are functions from an arbitrary type to some Writer type: a -> Writer b  
+We’ll declare the composition as a funny infix operator, sometimes called the “fish”. It’s a function of two arguments, each being a function on its own, and returning a function. The first argument is of the type (a->Writer b), the second is (b->Writer c), and the result is (a->Writer c).  
+Here’s the definition of this infix operator — the two arguments m1 and m2 appearing on either side of the fishy symbol:
+
+```haskell
+(>=>) :: (a -> Writer b) -> (b -> Writer c) -> (a -> Writer c)
+m1 >=> m2 = \x ->
+    let (y, s1) = m1 x
+        (z, s2) = m2 y
+    in (z, s1 ++ s2)
+```
+I will also define the identity morphism for our category, but for reasons that will become clear much later, I will call it return.
+
+```haskell
+return :: a -> Writer a
+return x = (x, "")
+```

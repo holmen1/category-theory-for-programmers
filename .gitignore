@@ -1,6 +1,7 @@
 # Ignore specific executables
 hello
-challenge4
+2_Types_and_Functions/challenge24
+4_Kleisli_Categories/kleisli_categories
 
 .venv
 dist
@@ -26,6 +27,3 @@ cabal.project.local
 cabal.project.local~
 .HTF/
 .ghc.environment.*
-
-
-
