@@ -332,3 +332,21 @@ Make sure you understand the difference between the regular composition of funct
 
 Haskell's type system and functional programming features allow us to define and work with custom types like Optional in an elegant and expressive way. The Optional type, similar to Maybe, provides a way to handle optional values, and the composition of functions returning Optional values showcases the power of Haskell's functional composition.
 
+
+## 5. Products and Coproducts
+### Initial Object
+The initial object is the object that has one and only one
+morphism going to any object in the category.
+For example, in the category of sets and functions, the initial object is the empty set. Remember, an empty set corresponds to the Haskell type Void
+and the unique polymorphic function from Void to any other type is called absurd:
+```haskell 
+absurd = undefined :: Void -> a
+```
+
+### Terminal Object
+The terminal object is the object with one and only one morphism coming to it from any object in the category.
+```haskell
+unit :: a -> ()
+unit _ = ()
+```
+
