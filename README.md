@@ -305,10 +305,30 @@ Our morphisms are functions from an arbitrary type to some Writer type: a -> Wri
 We’ll declare the composition as a funny infix operator, sometimes called the “fish”. It’s a function of two arguments, each being a function on its own, and returning a function. The first argument is of the type (a->Writer b), the second is (b->Writer c), and the result is (a->Writer c).  
 See [writer.hs](4_Kleisli_Categories/writer.hs) for the full implementation.
 
+### Maybe as a Kleisli Category
+This Optional type is Maybe renamed. It’s a type constructor that takes a type and returns a new type. It’s a type-level function. It’s a functor. It’s a monad. It’s a Kleisli category.
+
+```haskell
+data Optional a = None | Some a
+    deriving (Show, Eq)
+
+(>=>) :: (a -> Optional b) -> (b -> Optional c) -> (a -> Optional c)
+f >=> g = \x -> case f x of
+    None   -> None
+    Some y -> g y
+```
+
+See [optional.hs](4_Kleisli_Categories/optional.hs) for the full implementation.
+
 ### Kleisli Categories
 For our limited purposes, a Kleisli category has, as objects, the types of the underlying programming language. Morphisms from type A to type B are functions that go from
 A to a type derived from B using the particular embellishment. Each
 Kleisli category defines its own way of composing such morphisms, as
 well as the identity morphisms with respect to that composition.  
 
+Kleisli categories are a generalization of the concept of a category. They are categories where the hom-sets are not just sets but monads. The composition of morphisms is defined by the monadic bind operation, and the identity morphism is defined by the monadic return operation.
+
+Make sure you understand the difference between the regular composition of functions and the composition of Kleisli arrows. The former is a binary operation on functions, while the latter is a binary operation on morphisms in a category. The composition of functions is associative, while the composition of Kleisli arrows is associative only up to a natural transformation.
+
+Haskell's type system and functional programming features allow us to define and work with custom types like Optional in an elegant and expressive way. The Optional type, similar to Maybe, provides a way to handle optional values, and the composition of functions returning Optional values showcases the power of Haskell's functional composition.
 
