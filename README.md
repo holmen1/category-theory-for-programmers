@@ -462,7 +462,7 @@ Left "Locker 110 is already taken!"
 Many properties of data structures are composable. For instance, if
 you know how to compare values of basic types for equality, and you
 know how to generalize these comparisons to product and coproduct types,
-you can automatethe derivation of equality operators for composite types.
+you can automate the derivation of equality operators for composite types.
 
 ### Product Types
 You can combine an arbitrary number of types into a product by
@@ -506,7 +506,7 @@ rhoInv :: a -> (a, ())
 rhoInv x = (x, ())
 ```
 
-There is a more general way of defining product types in Haskell —
+There is a more general way of defining product types in Haskell
 ```haskell
 data Pair a b = P a b
 ```
@@ -668,10 +668,10 @@ with some entries of interest:
 |---------|-------------------------------|
 | 0       | Void                          |
 | 1       | ()                            |
-| a+b     | Either a b = Left a \| Right b |
-| a*b     | (a, b) or Pair a b = Pair a b |
-| 2=1+1   | data Bool = True \| False      |
-| 1+a     | data Maybe = Nothing \| Just a |
+| a + b     | Either a b = Left a \| Right b |
+| a * b     | (a, b) or Pair a b = Pair a b |
+| 2 = 1 + 1   | data Bool = True \| False      |
+| 1 + a     | data Maybe = Nothing \| Just a |
 
 The list type is quite interesting, because it’s defined as a solution to
 an equation. The type we are defining appears on both sides of the
