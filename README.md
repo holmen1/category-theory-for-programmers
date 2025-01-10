@@ -676,17 +676,19 @@ with some entries of interest:
 The list type is quite interesting, because it’s defined as a solution to
 an equation. The type we are defining appears on both sides of the
 equation:
-```List a = Nil | Cons a (List a)```
+```haskell
+List a = Nil | Cons a (List a)
+```
 If we do our usual substitutions, and also replace List a with x, we get
 the equation: ```x = 1 + a * x```
 
 This leads to the following series:
 ```
-x = 1 + a*x
-x = 1 + a*(1 + a*x) = 1 + a + a*a*x
-x = 1 + a + a*a*(1 + a*x) = 1 + a + a*a + a*a*a*x
+x = 1 + a * x
+x = 1 + a * (1 + a * x) = 1 + a + a * a* x
+x = 1 + a + a *a * (1 + a * x) = 1 + a + a * a + a * a * a * x
 ...
-x = 1 + a + a*a + a*a*a + a*a*a*a...
+x = 1 + a + a * a + a * a * a + a * a * a * a...
 ```
 We end up with an infinite sum of products (tuples), which can be in-
 terpreted as: A list is either empty, 1; or a singleton, a; or a pair, a*a;
