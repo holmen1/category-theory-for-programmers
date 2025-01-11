@@ -1,11 +1,9 @@
-#ifndef SHAPE_H
-#define SHAPE_H
-
 #include <cmath>
 
 class Shape {
 public:
     virtual float area() const = 0;
+    virtual float circ() const = 0;
 };
 
 class Circle : public Shape {
@@ -14,6 +12,7 @@ private:
 public:
     Circle(float r);
     float area() const override;
+    float circ() const override;
 };
 
 class Rect : public Shape {
@@ -22,6 +21,14 @@ private:
 public:
     Rect(float w, float h);
     float area() const override;
+    float circ() const override;
 };
 
-#endif // SHAPE_H
+class Square : public Shape {
+private:
+    float side;
+public:
+    Square(float s);
+    float area() const override;
+    float circ() const override;
+};

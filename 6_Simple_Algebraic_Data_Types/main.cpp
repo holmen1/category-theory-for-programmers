@@ -2,11 +2,15 @@
 #include "shape.h"
 
 int main() {
-    Circle circle(5.0);
-    Rect rect(4.0, 6.0);
+    Shape* shapes[] = {
+        new Circle(5.0),
+        new Rect(4.0, 6.0),
+        new Square(5.0)
+    };
 
-    std::cout << "Circle area: " << circle.area() << std::endl;
-    std::cout << "Rectangle area: " << rect.area() << std::endl;
-
+    for (Shape* shape : shapes) {
+        std::cout << "Area: " << shape->area() << std::endl;
+        std::cout << "Circumference: " << shape->circ() << std::endl;
+    }
     return 0;
 }
