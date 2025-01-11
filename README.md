@@ -668,10 +668,10 @@ with some entries of interest:
 |---------|-------------------------------|
 | 0       | Void                          |
 | 1       | ()                            |
-| a + b     | Either a b = Left a \| Right b |
-| a * b     | (a, b) or Pair a b = Pair a b |
-| 2 = 1 + 1   | data Bool = True \| False      |
-| 1 + a     | data Maybe = Nothing \| Just a |
+| a + b   | Either a b = Left a \| Right b |
+| a * b   | (a, b) or Pair a b = Pair a b  |
+| 2 = 1 + 1 | data Bool = True \| False    |
+| 1 + a   | data Maybe = Nothing \| Just a |
 
 The list type is quite interesting, because it’s defined as a solution to
 an equation. The type we are defining appears on both sides of the
@@ -693,30 +693,4 @@ x = 1 + a + a * a + a * a * a + a * a * a * a...
 We end up with an infinite sum of products (tuples), which can be in-
 terpreted as: A list is either empty, 1; or a singleton, a; or a pair, a*a;
 or a triple, a*a*a; etc...
-
-{- Challenges
-Here’s a sum type defined in Haskell: -}
-data Shape = Circle Float | Rect Float Float
---When we want to define a function like area that acts on a Shape,
---we do it by pattern matching on the two constructors:
-area :: Shape -> Float
-area (Circle r) = pi * r * r
-area (Rect d h) = d * h
-circ :: Shape -> Float
-circ (Circle r) = 2.0 * pi * r
-circ (Rect d h) = 2.0 * (d + h)
-
-c = Circle 2.0
-r = Rect 4.0 3.0
-main :: IO ()
-main = do
-    print $ "Circle area: " ++ show (area c)
-    print $ "Rectangle area: " ++ show (area r)
-    print $ "Circle circumference: " ++ show (circ c)
-    print $ "Rectangle perimeter: " ++ show (circ r)
--- ghci> main
--- "Circle area: 12.566371"
--- "Rectangle area: 12.0"
--- "Circle circumference: 12.566371"
--- "Rectangle perimeter: 14.0"
 
