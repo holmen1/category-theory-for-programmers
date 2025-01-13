@@ -1,5 +1,5 @@
 
-
+*.out
 .venv
 dist
 dist-*
@@ -32,3 +32,4 @@ hello
 4_Kleisli_Categories/writer
 4_Kleisli_Categories/optional
 6_Simple_Algebraic_Data_Types/main
+7_Functors/reader
