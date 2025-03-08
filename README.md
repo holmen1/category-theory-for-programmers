@@ -14,6 +14,13 @@ $ ghcup set ghc
 $ ghcup set cabal
 ```
 
+Python virtual environment to run notebooks
+```bash
+$ python -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
 ### Writing your first Haskell program
 
 In your editor, create a new file named hello.hs. Write the following in it:

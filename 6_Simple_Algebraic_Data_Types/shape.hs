@@ -17,4 +17,4 @@ main = do
     mapM_ (\shape -> print $ "Area: " ++ show (area shape)
                      ++ ", Circumference: " ++ show (circ shape)) shapes
 
-    
+
