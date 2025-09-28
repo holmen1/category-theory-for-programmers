@@ -1164,6 +1164,146 @@ including the Eq type class I mentioned before.
 
 
 ### The Writer Functor
+A Kleisli category, being a category, defines composition
+and identity.
 
+```haskell
+(>=>) :: (a -> Writer b) -> (b -> Writer c) -> (a -> Writer c)
+m1 >=> m2 = \x ->
+let (y, s1) = m1 x
+(z, s2) = m2 y
+in (z, s1 ++ s2)
+
+return :: a -> Writer a return x = (x, "")
+```
+It turns out that, if you look at the types of these two functions long
+enough (and I mean, long enough), you can find a way to combine them
+to produce a function with the right type signature to serve as fmap.
+Like this:
+```haskell
+fmap f = id >=> (\x -> return (f x))
+```
+Here, the fish operator combines two functions: one of them is the familiar id, and the other is a lambda that applies return to the result
+of acting with f on the lambda’s argument.
+Putting it all together, we end up with a function that takes Writer a
+and returns Writer b, exactly what fmap is supposed to produce.
+Notice that this argument is very general: you can replace Writer
+with any type constructor. As long as it supports a fish operator and
+return, you can define fmap as well. So the embellishment in the Kleisli
+category is always a functor.
+
+### Covariant and Contravariant Functors
+Now that we’ve reviewed the writer functor, let’s go back to the reader
+functor. It was based on the partially applied function-arrow type constructor:
+```(->) r```
+We can rewrite it as a type synonym:
+```haskell
+type Reader r a = r -> a
+```
+for which the Functor instance, as we’ve seen before, reads:
+```haskell
+instance Functor (Reader r) where
+fmap f g = f . g
+```
+But just like the pair type constructor, or the Either type constructor,
+the function type constructor takes two type arguments. The pair and
+Either were functorial in both arguments — they were bifunctors. Is
+the function constructor a bifunctor too?
+
+Let’s try to make it functorial in the first argument. We’ll start with
+a type synonym — it’s just like the Reader but with the arguments
+flipped:
+```haskell
+type Op r a = a -> r
+```
+This time we fix the return type, r, and vary the argument type, a. Let’s
+see if we can somehow match the types in order to implement fmap,
+which would have the following type signature:
+
+```haskell
+fmap :: (a -> b) -> (a -> r) -> (b -> r)
+```
+With just two functions taking a and returning, respectively, b and r,
+there is simply no way to build a function taking b and returning r! It
+would be different if we could somehow invert the first function, so that
+it took b and returned a instead. We can’t invert an arbitrary function,
+but we can go to the opposite category.
+A short recap: For every category C there is a dual category C
+op. It’s
+a category with the same objects as C, but with all the arrows reversed.
+Consider a functor that goes between C
+op and some other category D:
+```F :: Cop → D```  
+Such a functor maps a morphism
+```fop :: a → b in Cop``` to the morphism
+```F fop :: F a → F b``` in D. But the morphism fop secretly corresponds to some
+morphism ```f :: b → a``` in the original category C. Notice the inversion.
+Now, F is a regular functor, but there is another mapping we can
+define based on F, which is not a functor — let’s call it G. It’s a mapping
+from C to D. It maps objects the same way F does, but when it comes
+to mapping morphisms, it reverses them. It takes a morphism ```f :: b →
+a``` in C, maps it first to the opposite morphism
+```fop :: a → b``` and then uses
+the functor F on it, to get ```F fop :: F a → F b```.
+
+Considering that ```F a``` is the same as ```G a``` and ```F b``` is the same as ```G b```,
+the whole trip can be described as:
+```haskell
+G f :: (b → a) → (G a → G b)
+```
+It’s a “functor with a twist.” A mapping of categories that inverts the
+direction of morphisms in this manner is called a contravariant functor.
+Notice that a contravariant functor is just a regular functor from the
+opposite category.
+Here’s the typeclass defining a contravariant functor (really, a contravariant endofunctor) in Haskell:
+class Contravariant f where
+```haskell
+contramap :: (b -> a) -> (f a -> f b)
+```
+Our type constructor Op is an instance of it:
+```haskell
+instance Contravariant (Op r) where
+-- (b -> a) -> Op r a -> Op r b
+contramap f g = g . f
+```
+Notice that the function f inserts itself before (that is, to the right of)
+the contents of Op — the function g.
+
+### Profunctors
+We’ve seen that the function-arrow operator is contravariant in its first
+argument and covariant in the second. Is there a name for such a beast?
+It turns out that, if the target category is Set, such a beast is called a
+profunctor. Because a contravariant functor is equivalent to a covariant
+functor from the opposite category, a profunctor is defined as:
+```Cop × D → Set```
+Since, to first approximation, Haskell types are sets, we apply the
+name Profunctor to a type constructor p of two arguments, which is
+contra-functorial in the first argument and functorial in the second.
+Here’s the appropriate typeclass taken from the Data.Profunctor library:
+```haskell
+class Profunctor p where
+dimap :: (a -> b) -> (c -> d) -> p b c -> p a d
+dimap f g = lmap f . rmap g
+lmap :: (a -> b) -> p b c -> p a c
+lmap f = dimap f id
+rmap :: (b -> c) -> p a b -> p a c
+rmap = dimap id
+```
+All three functions come with default implementations. Just like with
+Bifunctor, when declaring an instance of Profunctor, you have a choice
+of either implementing dimap and accepting the defaults for lmap and
+rmap, or implementing both lmap and rmap and accepting the default
+for dimap.
+
+Now we can assert that the function-arrow operator is an instance of
+a Profunctor:
+```haskell
+instance Profunctor (->) where
+dimap ab cd bc = cd . bc . ab
+lmap = flip (.)
+rmap = (.)
+```
+Profunctors have their application in the Haskell lens library. We’ll see
+them again when we talk about ends and coends.
 
 
